@@ -16,12 +16,11 @@ body {
     overflow-x: hidden;
 }
 
-/* Password Screen */
 #passwordScreen {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: black;
+    background: #000;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -47,21 +46,64 @@ button {
     cursor: pointer;
 }
 
-/* Stars */
-.star {
+.container {
+    padding: 50px 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    text-shadow: 0 0 20px #ff99cc;
+}
+
+#countdown {
+    font-size: 1.3em;
+    margin-bottom: 20px;
+}
+
+.music-btn {
+    margin: 15px 0;
+}
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    justify-items: center;
+    margin-top: 20px;
+}
+
+.gallery img {
+    width: 100%;
+    max-width: 250px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.6);
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+}
+
+#lightbox {
+    display: none;
     position: fixed;
-    width: 2px;
-    height: 2px;
-    background: white;
-    animation: twinkle 2s infinite alternate;
+    z-index: 999;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
 }
 
-@keyframes twinkle {
-    from { opacity: 0.2; }
-    to { opacity: 1; }
+#lightbox img {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 20px;
 }
 
-/* Floating Hearts */
 .heart {
     position: fixed;
     bottom: -10px;
@@ -72,35 +114,6 @@ button {
 @keyframes floatUp {
     0% { transform: translateY(0); opacity: 1; }
     100% { transform: translateY(-100vh); opacity: 0; }
-}
-
-.container {
-    padding: 50px 20px;
-}
-
-h1 {
-    font-size: 3em;
-    text-shadow: 0 0 20px #ff99cc;
-}
-
-#countdown {
-    font-size: 1.5em;
-    margin-bottom: 20px;
-}
-
-/* Gallery */
-.gallery img {
-    width: 250px;
-    height: 300px;
-    object-fit: cover;
-    margin: 10px;
-    border-radius: 20px;
-    box-shadow: 0 0 25px rgba(255,255,255,0.6);
-    transition: 0.5s;
-}
-
-.gallery img:hover {
-    transform: scale(1.05);
 }
 </style>
 </head>
@@ -113,22 +126,31 @@ h1 {
     <button onclick="checkPassword()">Enter</button>
 </div>
 
-<!-- Music -->
-<audio autoplay loop>
-    <source src="music.mp3" type="audio/mpeg">
+<audio id="bgMusic" loop>
+    <source src="cinnamon.mp3" type="audio/mpeg">
 </audio>
 
 <div class="container" id="mainContent" style="display:none;">
     <h1>Happy Valentine’s Day & Happy Birthday, Beth ❤️🎂</h1>
     <div id="countdown"></div>
+
+    <div class="music-btn">
+        <button onclick="toggleMusic()">Play / Pause Music 🎵</button>
+    </div>
+
     <p id="typedMessage"></p>
 
     <div class="gallery">
-        <img src="photo1.jpg">
-        <img src="photo2.jpg">
-        <img src="photo3.jpg">
-        <img src="photo4.jpg">
+        <img src="mmexport1750268940238.jpg" onclick="openLightbox(this)">
+        <img src="mmexport1771014039572.jpg" onclick="openLightbox(this)">
+        <img src="mmexport1771014079867.jpg" onclick="openLightbox(this)">
+        <img src="mmexport1771014085634.jpg" onclick="openLightbox(this)">
+        <img src="mmexport1771014125054.jpg" onclick="openLightbox(this)">
     </div>
+</div>
+
+<div id="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg">
 </div>
 
 <script>
@@ -137,15 +159,24 @@ function checkPassword() {
     if (input === "Beth") {
         document.getElementById("passwordScreen").style.display = "none";
         document.getElementById("mainContent").style.display = "block";
+        document.getElementById("bgMusic").play();
         typeMessage();
     } else {
         alert("Wrong secret name ❤️");
     }
 }
 
-/* Countdown */
+function toggleMusic() {
+    const music = document.getElementById("bgMusic");
+    if (music.paused) {
+        music.play();
+    } else {
+        music.pause();
+    }
+}
+
 const targetDate = new Date("February 14, 2026 00:00:00").getTime();
-const countdown = setInterval(function() {
+setInterval(function() {
     const now = new Date().getTime();
     const distance = targetDate - now;
 
@@ -154,10 +185,9 @@ const countdown = setInterval(function() {
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
     document.getElementById("countdown").innerHTML =
-        "Countdown: " + days + "d " + hours + "h " + minutes + "m";
+        "Countdown: " + days + "d " + hours + "h " + minutes + "m ";
 }, 1000);
 
-/* Typing Effect */
 const message = `Beth, today is not just Valentine’s Day…
 It is the birthday of the most beautiful soul I have ever known.
 
@@ -176,16 +206,15 @@ function typeMessage() {
     }
 }
 
-/* Stars */
-for (let i = 0; i < 100; i++) {
-    const star = document.createElement("div");
-    star.classList.add("star");
-    star.style.top = Math.random() * 100 + "vh";
-    star.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(star);
+function openLightbox(img) {
+    document.getElementById("lightbox").style.display = "block";
+    document.getElementById("lightboxImg").src = img.src;
 }
 
-/* Floating Hearts */
+function closeLightbox() {
+    document.getElementById("lightbox").style.display = "none";
+}
+
 function createHeart() {
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -204,3 +233,4 @@ setInterval(createHeart, 300);
 
 </body>
 </html>
+

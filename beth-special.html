@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Beth ❤️🎂</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, #1a001f, #4b004f, #8e005d);
+    color: white;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+/* Password Screen */
+#passwordScreen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+input {
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px 25px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 20px;
+    background: #ff4da6;
+    color: white;
+    cursor: pointer;
+}
+
+/* Stars */
+.star {
+    position: fixed;
+    width: 2px;
+    height: 2px;
+    background: white;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+}
+
+/* Floating Hearts */
+.heart {
+    position: fixed;
+    bottom: -10px;
+    font-size: 20px;
+    animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+}
+
+.container {
+    padding: 50px 20px;
+}
+
+h1 {
+    font-size: 3em;
+    text-shadow: 0 0 20px #ff99cc;
+}
+
+#countdown {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+/* Gallery */
+.gallery img {
+    width: 250px;
+    height: 300px;
+    object-fit: cover;
+    margin: 10px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.6);
+    transition: 0.5s;
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<div id="passwordScreen">
+    <h2>Enter The Secret Name 💖</h2>
+    <input type="password" id="passwordInput" placeholder="Type here...">
+    <button onclick="checkPassword()">Enter</button>
+</div>
+
+<audio autoplay loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container" id="mainContent" style="display:none;">
+    <h1>Happy Valentine’s Day & Happy Birthday, Beth ❤️🎂</h1>
+    <div id="countdown"></div>
+    <p id="typedMessage"></p>
+
+    <div class="gallery">
+        <img src="photo1.jpg">
+        <img src="photo2.jpg">
+    </div>
+</div>
+
+<script>
+function checkPassword() {
+    const input = document.getElementById("passwordInput").value;
+    if (input === "Beth") {
+        document.getElementById("passwordScreen").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+        typeMessage();
+    } else {
+        alert("Wrong secret name ❤️");
+    }
+}
+
+/* Countdown */
+const targetDate = new Date("February 14, 2026 00:00:00").getTime();
+const countdown = setInterval(function() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+    document.getElementById("countdown").innerHTML =
+        "Countdown: " + days + "d " + hours + "h " + minutes + "m ";
+
+}, 1000);
+
+/* Typing Effect */
+const message = `Beth, today is not just Valentine’s Day…
+It is the birthday of the most beautiful soul I have ever known.
+
+Loving you is the greatest gift of my life.
+And celebrating you today makes my heart twice as full.
+
+Happy Birthday, my queen.
+Happy Valentine’s Day, I love you. ❤️`;
+
+let i = 0;
+function typeMessage() {
+    if (i < message.length) {
+        document.getElementById("typedMessage").innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeMessage, 40);
+    }
+}
+
+/* Stars */
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(star);
+}
+
+/* Floating Hearts */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 20 + 15 + "px";
+    heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 6000);
+}
+setInterval(createHeart, 300);
+</script>
+
+</body>
+</html>
